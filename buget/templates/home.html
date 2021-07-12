@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buget plans</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card bg-dark text-light p-3">
+                    <h4>my total sum</h4>
+                    <h1>{{buget.total}}$</h1>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-dark text-light p-3">
+                    <h4>my total spent</h4>
+                    <h1>{{buget.spent}}$</h1>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-dark text-light p-3">
+                    <h4>my total actions</h4>
+                    <h1>{{buget.actions}}</h1>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <h3 class="col-6">My plans</h3>
+                <div class="col-6">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Add Plan
+                      </button>
+                    <!-- Button trigger modal -->
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="" method="POST">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add your Plan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% csrf_token %}
+                    {{form}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+  </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                
+                {% for p in plans %}
+                <div class="col-md-4 mb-4">
+                    <div class="card bg-dark text-light">
+                        <div class="card-header">
+                            {{p.spent}}$
+                        </div>
+                        <div class="card-body">
+                            
+                            {% if p.payed == True %}
+                            <del>
+                                <h3>{{p.name}}</h3>
+                                <p>{{p.comment}}</p>
+                            </del>
+                            {% else %}
+                                <h3>{{p.name}}</h3>
+                                <p>{{p.comment}}</p>
+                            {% endif %}
+                                
+                        </div>
+                        <div class="card-footer">
+                            
+                            {% if p.payed == False %}
+                                <a href="{% url 'main:update' p.pk %}" class="btn btn-warning">update</a>
+                                {% else %}
+                                <a href="{% url 'main:update' p.pk %}" class="btn btn-warning disabled">update</a>
+                            {% endif %}
+                                
+                            <a href="{% url 'main:delete' p.pk %}" class="btn btn-danger">delete</a>
+                            
+                            {% if p.payed == False %}
+                                <a href="{% url 'main:pay' p.id %}" class="btn btn-success">pay</a>
+                                {% else %}
+                                <a href="#" class="btn btn-success disabled">payed</a>
+                            {% endif %}
+                               
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                    
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('#id_name').className='form-control mb-3'
+        document.querySelector('#id_comment').className='form-control mb-3'
+        document.querySelector('#id_spent').className='form-control mb-3'
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
