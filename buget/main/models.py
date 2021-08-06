@@ -18,7 +18,9 @@ class Plans(models.Model):
     spent = models.IntegerField('spent money')
     payed = models.BooleanField('payed/not payed',default=False)
 
+    def update_to(self):
+        obj = Plans.objects.all()
+        obj.get_or_create(payed=False)
+
     def __str__(self):
         return self.name
-    
-    

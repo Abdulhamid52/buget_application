@@ -95,7 +95,7 @@
                             <a href="{% url 'main:delete' p.pk %}" class="btn btn-danger">delete</a>
                             
                             {% if p.payed == False %}
-                                <a href="{% url 'main:pay' p.id %}" class="btn btn-success">pay</a>
+                                <a href="{% url 'main:pay' p.pk %}" class="btn btn-success">pay</a>
                                 {% else %}
                                 <a href="#" class="btn btn-success disabled">payed</a>
                             {% endif %}
@@ -110,11 +110,8 @@
         </div>
     </div>
 
-    <script>
-        document.querySelector('#id_name').className='form-control mb-3'
-        document.querySelector('#id_comment').className='form-control mb-3'
-        document.querySelector('#id_spent').className='form-control mb-3'
-    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
 </body>
 </html>

@@ -2,12 +2,32 @@ from django.shortcuts import render, redirect
 from django.views.generic import View, UpdateView, DeleteView
 from .forms import *
 from .models import *
+from django.http import JsonResponse
+import schedule
+import schedule
+import time
+import datetime
 
-# Create your views here.
+def update_payed():
+    obj = Plans.objects.all()
+    if obj:
+        obj.update(payed=False)
+        print('boldi')
+    else:
+        print('bomadi')
+    return True
 
 class HomeView(View):
 
     def get(self, request):
+        schedule.every(1).seconds.do(update_payed)
+
+        while True:
+            if datetime.datetime.now().strftime('%H,%M') == '15,18':
+                schedule.run_pending()
+            else:
+                break
+
         form = AddPlan(request.GET)
         plans = Plans.objects.all().order_by('-id')
         buget = MyBuget.objects.last()
@@ -42,8 +62,8 @@ class PlansDelete(DeleteView):
     success_url = '/'
     template_name = 'delete.html'
 
-def pay(request, id):
-    plan = Plans.objects.get(id=id)
+def pay(request, pk):
+    plan = Plans.objects.get(pk=pk)
     buget = MyBuget.objects.last()
     if plan.payed == False:
         minus = buget.total - plan.spent
@@ -55,4 +75,5 @@ def pay(request, id):
         plan.save()
         return redirect('/')
     else:
-        pass
+        return redirect('/')
+
