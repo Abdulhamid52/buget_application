@@ -87,7 +87,7 @@
                         <div class="card-footer">
                             
                             {% if p.payed == False %}
-                                <a href="{% url 'main:update' p.pk %}" class="btn btn-warning">update</a>
+                                <a href="{% url 'main:update' p.pk %}" class="btn btn-warning payed">update</a>
                                 {% else %}
                                 <a href="{% url 'main:update' p.pk %}" class="btn btn-warning disabled">update</a>
                             {% endif %}
@@ -95,9 +95,9 @@
                             <a href="{% url 'main:delete' p.pk %}" class="btn btn-danger">delete</a>
                             
                             {% if p.payed == False %}
-                                <a href="{% url 'main:pay' p.pk %}" class="btn btn-success">pay</a>
+                                <a id="pay" onclick="payBuget({{ p.pk }})" href="#" class="btn btn-success payed">pay</a>
                                 {% else %}
-                                <a href="#" class="btn btn-success disabled">payed</a>
+                                <a id="pay" href="#" class="btn btn-success disabled">payed</a>
                             {% endif %}
                                
                         </div>
@@ -113,5 +113,23 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
+    <script>
+
+        function payBuget(pk){
+            if (window.XMLHttpRequest) {
+                var xhttp=new XMLHttpRequest();
+            } else {  // code for IE6, IE5
+                var xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            let url = "/pay/"
+            xhttp.open("GET", "/pay/"+`?data=${pk}`, true);
+            xhttp.send();
+            document.querySelector('.payed').className='btn btn-warning disabled'
+            document.querySelector('#pay').className='btn btn-success disabled'
+            document.querySelector('#pay').innerHTML='payed'
+        }   
+            
+
+    </script>
 </body>
 </html>

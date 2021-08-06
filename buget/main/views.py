@@ -20,14 +20,6 @@ def update_payed():
 class HomeView(View):
 
     def get(self, request):
-        schedule.every(1).seconds.do(update_payed)
-
-        while True:
-            if datetime.datetime.now().strftime('%H,%M') == '15,18':
-                schedule.run_pending()
-            else:
-                break
-
         form = AddPlan(request.GET)
         plans = Plans.objects.all().order_by('-id')
         buget = MyBuget.objects.last()
@@ -62,7 +54,8 @@ class PlansDelete(DeleteView):
     success_url = '/'
     template_name = 'delete.html'
 
-def pay(request, pk):
+def pay(request):
+    pk = request.GET.get('data')
     plan = Plans.objects.get(pk=pk)
     buget = MyBuget.objects.last()
     if plan.payed == False:
@@ -73,7 +66,7 @@ def pay(request, pk):
         buget.save()
         plan.payed = True
         plan.save()
-        return redirect('/')
+        return JsonResponse({'status':200})
     else:
-        return redirect('/')
+        return JsonResponse({'status':400})
 
